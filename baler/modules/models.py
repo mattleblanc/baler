@@ -28,16 +28,21 @@ class AE(nn.Module):
 
         self.activations = {}
 
+        print("n_features")
+        print(n_features)
+        print("z_dim")
+        print(z_dim)
+        
         # encoder
-        self.en1 = nn.Linear(n_features, 200, dtype=torch.float64)
-        self.en2 = nn.Linear(200, 100, dtype=torch.float64)
-        self.en3 = nn.Linear(100, 50, dtype=torch.float64)
-        self.en4 = nn.Linear(50, z_dim, dtype=torch.float64)
+        self.en1 = nn.Linear(n_features, 200, dtype=torch.float32)
+        self.en2 = nn.Linear(200, 100, dtype=torch.float32)
+        self.en3 = nn.Linear(100, 50, dtype=torch.float32)
+        self.en4 = nn.Linear(50, z_dim, dtype=torch.float32)
         # decoder
-        self.de1 = nn.Linear(z_dim, 50, dtype=torch.float64)
-        self.de2 = nn.Linear(50, 100, dtype=torch.float64)
-        self.de3 = nn.Linear(100, 200, dtype=torch.float64)
-        self.de4 = nn.Linear(200, n_features, dtype=torch.float64)
+        self.de1 = nn.Linear(z_dim, 50, dtype=torch.float32)
+        self.de2 = nn.Linear(50, 100, dtype=torch.float32)
+        self.de3 = nn.Linear(100, 200, dtype=torch.float32)
+        self.de4 = nn.Linear(200, n_features, dtype=torch.float32)
 
         self.n_features = n_features
         self.z_dim = z_dim
@@ -94,41 +99,41 @@ class AE_Dropout_BN(nn.Module):
 
         # encoder
         self.enc_nn = nn.Sequential(
-            nn.Linear(n_features, 200, dtype=torch.float64),
+            nn.Linear(n_features, 200, dtype=torch.float32),
             nn.Dropout(p=0.5),
             nn.LeakyReLU(),
-            # nn.BatchNorm1d(200,dtype=torch.float64),
-            nn.Linear(200, 100, dtype=torch.float64),
+            # nn.BatchNorm1d(200,dtype=torch.float32),
+            nn.Linear(200, 100, dtype=torch.float32),
             nn.Dropout(p=0.4),
             nn.LeakyReLU(),
-            # nn.BatchNorm1d(100,dtype=torch.float64),
-            nn.Linear(100, 50, dtype=torch.float64),
+            # nn.BatchNorm1d(100,dtype=torch.float32),
+            nn.Linear(100, 50, dtype=torch.float32),
             nn.Dropout(p=0.3),
             nn.LeakyReLU(),
-            # nn.BatchNorm1d(50,dtype=torch.float64),
-            nn.Linear(50, z_dim, dtype=torch.float64),
+            # nn.BatchNorm1d(50,dtype=torch.float32),
+            nn.Linear(50, z_dim, dtype=torch.float32),
             nn.Dropout(p=0.2),
             nn.LeakyReLU(),
-            # nn.BatchNorm1d(z_dim,dtype=torch.float64)
+            # nn.BatchNorm1d(z_dim,dtype=torch.float32)
         )
 
         # decoder
         self.dec_nn = nn.Sequential(
-            nn.Linear(z_dim, 50, dtype=torch.float64),
+            nn.Linear(z_dim, 50, dtype=torch.float32),
             # nn.Dropout(p=0.2),
             nn.LeakyReLU(),
-            nn.BatchNorm1d(50, dtype=torch.float64),
-            nn.Linear(50, 100, dtype=torch.float64),
+            nn.BatchNorm1d(50, dtype=torch.float32),
+            nn.Linear(50, 100, dtype=torch.float32),
             # nn.Dropout(p=0.3),
             nn.LeakyReLU(),
-            nn.BatchNorm1d(100, dtype=torch.float64),
-            nn.Linear(100, 200, dtype=torch.float64),
+            nn.BatchNorm1d(100, dtype=torch.float32),
+            nn.Linear(100, 200, dtype=torch.float32),
             # nn.Dropout(p=0.4),
             nn.LeakyReLU(),
-            nn.BatchNorm1d(200, dtype=torch.float64),
-            nn.Linear(200, n_features, dtype=torch.float64),
+            nn.BatchNorm1d(200, dtype=torch.float32),
+            nn.Linear(200, n_features, dtype=torch.float32),
             # nn.Dropout(p=0.5),
-            nn.BatchNorm1d(n_features, dtype=torch.float64),
+            nn.BatchNorm1d(n_features, dtype=torch.float32),
             nn.ReLU(),
         )
 

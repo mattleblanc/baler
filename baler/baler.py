@@ -94,12 +94,15 @@ def perform_training(project_path, config):
             config.number_of_columns = number_of_columns
         else:
             raise NameError(
-                "Data dimension can only be 1 or 2. Got config.data_dimension value = "
+                "Data dimension can only be 1 or 2 or 3. Got config.data_dimension value = "
                 + str(config.data_dimension)
             )
     except AttributeError:
         print(f"{config.number_of_columns} -> {config.latent_space_size} dimensions")
         assert number_of_columns == config.number_of_columns
+
+    print(config.latent_space_size)
+    print(config.number_of_columns)
 
     device = helper.get_device()
 
@@ -173,8 +176,10 @@ def perform_compression(project_path, config):
 
     print("Compression took:", f"{(end - start) / 60:.3} minutes")
 
-    names = np.load(config.input_path)["names"]
-
+    #names = np.load(config.input_path)["names"]
+    names = np.load(config.input_path)["y"]
+    #names = []
+    
     if config.extra_compression:
         np.savez_compressed(
             project_path + "compressed_output/compressed.npz",
@@ -202,7 +207,7 @@ def perform_decompression(project_path, config):
         config (dataClass): Base class selecting user inputs
     """
     print("Decompressing...")
-
+    
     start = time.time()
     model_name = config.model_name
     decompressed, names, normalization_features = helper.decompress(
@@ -262,7 +267,7 @@ def print_info(project_path, config):
     meta_data = [
         model,
         training_path + "loss_data.npy",
-        training_path + "normalization_features.npy",
+        #training_path + "normalization_features.npy",
     ]
 
     meta_data_stats = [

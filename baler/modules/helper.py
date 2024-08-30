@@ -228,8 +228,16 @@ def process(input_path, custom_norm, test_size, apply_normalization):
         ndarray, ndarray, ndarray: Array with the train set, array with the test set and array with the normalization features.
     """
     loaded = np.load(input_path)
-    data = loaded["data"]
-    names = loaded["names"]
+    #data = loaded["data"]
+    data = loaded["X"]
+
+    # MLB trying to fix latent space issue ...
+    #print(data.shape)
+    data = data.transpose(0,2,1)
+    #print(data.shape)
+    
+    #names = loaded["names"]
+    names = loaded["y"]
     normalization_features = []
 
     normalization_features = data_processing.find_minmax(data)
@@ -372,17 +380,24 @@ def compress(model_path, config):
 
     # Loads the data and applies normalization if config.apply_normalization = True
     loaded = np.load(config.input_path)
-    data_before = loaded["data"]
+    #data_before = loaded["data"]
+    data_before = loaded["X"]
     if config.apply_normalization:
         print("Normalizing...")
         data = normalize(data_before, config.custom_norm)
     else:
         data = data_before
+
+    # MLB trying to fix latent space issue ...
+    data_before = data_before.transpose(0,2,1)
+    data = data.transpose(0,2,1)
+     
     number_of_columns = 0
     try:
         print("compression ratio:", config.compression_ratio)
         if config.data_dimension == 1:
-            column_names = np.load(config.input_path)["names"]
+            #column_names = np.load(config.input_path)["names"]
+            column_names = np.load(config.input_path)["y"]
             number_of_columns = len(column_names)
             config.latent_space_size = int(
                 number_of_columns // config.compression_ratio
@@ -485,6 +500,9 @@ def decompress(model_path, input_path, model_name, config):
     model_dict = torch.load(str(model_path))
     number_of_columns = len(model_dict[list(model_dict.keys())[-1]])
 
+    #latent_space_size = 278 # MLB!
+    latent_space_size = 34
+    
     # Initialise and load the model correctly.
     device = get_device()
     model_object = data_processing.initialise_model(model_name)

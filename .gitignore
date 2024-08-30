@@ -1,3 +1,7 @@
+baler.env/
+*~
+cms_data.root
+interact.sh
 /projects/*/*
 /data/*
 !/projects/*/config.json
