@@ -495,13 +495,13 @@ def decompress(model_path, input_path, model_name, config):
     names = loaded["names"]
     normalization_features = loaded["normalization_features"]
     model_name = config.model_name
-    latent_space_size = len(data[0])
+    latent_space_size = len(data[0,0,0])
     bs = config.batch_size
     model_dict = torch.load(str(model_path))
     number_of_columns = len(model_dict[list(model_dict.keys())[-1]])
 
     #latent_space_size = 278 # MLB!
-    latent_space_size = 34
+    #latent_space_size = 34
     
     # Initialise and load the model correctly.
     device = get_device()
