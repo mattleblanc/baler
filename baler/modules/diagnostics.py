@@ -9,7 +9,7 @@ def get_mean_node_activations(input_dict: dict) -> dict:
     output_dict = {}
     for kk in input_dict:
         output_dict_layer = []
-        for node in input_dict[kk].T:
+        for node in input_dict[kk].mT:
             output_dict_layer.append(torch.mean(node).item())
         output_dict[kk] = output_dict_layer
     return output_dict
